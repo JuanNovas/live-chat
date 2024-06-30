@@ -1,4 +1,5 @@
 from core.database import db
+from bson.json_util import dumps
 
 class Message:
     collection = db.messages
@@ -12,4 +13,4 @@ class Message:
         
     @classmethod
     def get_all(cls):
-        return cls.collection.find()
+        return dumps(cls.collection.find())
