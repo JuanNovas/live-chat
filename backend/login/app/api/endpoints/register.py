@@ -1,12 +1,10 @@
-from fastapi import APIRouter, HTTPException, Depends
-from passlib.context import CryptContext
+from fastapi import APIRouter, HTTPException
 from schemas.user import UserSchema
 from models.user import User
-from core.database import db
+from core.config import pwd_context
 
 register_router = APIRouter()
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 @register_router.post("/register")
 async def register(user: UserSchema):

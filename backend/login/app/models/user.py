@@ -13,4 +13,4 @@ class User:
         
     @classmethod
     def get_user(cls, username):
-        return cls.collection.find_one({"username" : username}, {"password" : 0})
+        return cls.collection.find_one({"username" : username})
