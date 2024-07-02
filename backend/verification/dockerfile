@@ -1,0 +1,15 @@
+# Utilizar una imagen base oficial de Python
+FROM python:3.10.11
+
+# Establecer el directorio de trabajo en /app
+WORKDIR /app
+
+# Copiar el contenido de la carpeta local 'app' en el directorio de trabajo del contenedor
+COPY app /app
+
+# Si tienes dependencias adicionales, descomenta las siguientes dos líneas y ajusta el archivo requirements.txt
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Comando por defecto para ejecutar el archivo main.py
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
