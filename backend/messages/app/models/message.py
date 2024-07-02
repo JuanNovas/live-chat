@@ -4,8 +4,8 @@ from bson.json_util import dumps
 class Message:
     collection = db.messages
 
-    def __init__(self, user_id: int, body: str):
-        self.user_id = user_id
+    def __init__(self, user: str, body: str):
+        self.user = user
         self.body = body
 
     def save(self):
