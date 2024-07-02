@@ -5,21 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live chat</title>
     <link rel="stylesheet" href="../styles/index.css">
+    <script src="../scripts/script.js"></script>
+    <script src="../scripts/login.js"></script>
+    <script src="../scripts/logout.js"></script>
 </head>
 <body>
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <label for="username">User:</label>
+                <input type="text" id="username" name="username" required>
+                <br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <br>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+    <button id="logout-button">Log out</button>
     <div class="container">
-
-        <div class="contacts-container">
-            <div class="contact-placeholder">
-                Contacto 1
+        <div class="left-container">
+            <div class="contacts-container">
+                <div class="contact-placeholder">
+                    Contacto 1
+                </div>
+                <div class="contact-placeholder">
+                    Contacto 2
+                </div>
+                <div class="contact-placeholder">
+                    Contacto 3
+                </div>
+                
+                <!-- Agrega más placeholders según sea necesario -->
             </div>
-            <div class="contact-placeholder">
-                Contacto 2
-            </div>
-            <div class="contact-placeholder">
-                Contacto 3
-            </div>
-            <!-- Agrega más placeholders según sea necesario -->
+            <button id="add-contact-button">Add Contact</button>
         </div>
     
         <div class="right-container">
@@ -32,31 +53,7 @@
                 <button id="send-button">Enviar</button>
             </div>
         </div>
-    
     </div>
-    
-    <script>
-        const chatContainer = document.getElementById('chat-container');
-        const messageInput = document.getElementById('message-input');
-        const sendButton = document.getElementById('send-button');
-        
-        sendButton.addEventListener('click', () => {
-            const messageText = messageInput.value.trim();
-            if (messageText !== '') {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message');
-                messageElement.textContent = messageText;
-                chatContainer.appendChild(messageElement);
-                messageInput.value = '';
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-        });
-        
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendButton.click();
-            }
-        });
-    </script>
+
 </body>
 </html>
