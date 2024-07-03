@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    const token = localStorage.getItem('jwtToken');
+    var token = localStorage.getItem('jwtToken');
     var selected = null;
     var username;
 
@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             if (data.access_token) {
                 localStorage.setItem('jwtToken', data.access_token);
                 console.log('Logged in succesfully');
+                token = data.access_token
  
                 document.getElementById('loginModal').style.display = 'none';
                 fetch('http://127.0.0.1:8003/validate_token', {
@@ -89,8 +90,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         .then(conversation => {
             const chatContainer = document.getElementById('chat-container');
             chatContainer.innerHTML = '';
-            conversation.conversation.forEach(message => {
-                console.log('Message:', message); // Debugging line
+            conversation.conversation.forEach(message => { 
     
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('message');
