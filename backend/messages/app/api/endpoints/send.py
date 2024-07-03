@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from datetime import datetime
 from schemas.message import MessageSchema
 from models.message import Message
 from core.security import verify_token
@@ -17,6 +18,6 @@ async def send_message(message: MessageSchema, credentials: HTTPAuthorizationCre
     except Exception as e:
         raise HTTPException(status_code=401, detail=str(e))
 
-    message_model = Message(user=user, body=message.body)
+    message_model = Message(user=user, body=message.body, receiver=message.receiver, timestamp=datetime.now())
     message_model.save()
     return {"status": "Message sent", "user": user}
