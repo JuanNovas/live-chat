@@ -12,4 +12,4 @@ class Contact:
         
     @classmethod
     def get_all(cls, user : str):
-        return dumps(cls.collection.find({"users" : user}))
+        return cls.collection.find({"users" : user})

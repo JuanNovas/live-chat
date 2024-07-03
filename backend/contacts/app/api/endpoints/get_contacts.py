@@ -19,6 +19,15 @@ async def get_contacts(credentials: HTTPAuthorizationCredentials = Depends(HTTPB
         raise HTTPException(status_code=401, detail=str(e))
     
     
-    contacts = Contact.get_all(user)
+    contacts = list(Contact.get_all(user))
+    print(contacts)
+    clean_contacts = []
+    
+    for contact in contacts:
+        if contact["users"][0] != user:
+            clean_contacts.append(contact["users"][0])
+        elif contact["users"][1] != user:
+            clean_contacts.append(contact["users"][1])
+    
 
-    return dumps(contacts)
+    return {"contacts" : clean_contacts}

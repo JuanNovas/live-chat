@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         logoutButton.addEventListener('click', function() {
             localStorage.removeItem('jwtToken');
             console.log('Logged out');
-            
+            const chatContainer = document.getElementById('chat-container');
+            chatContainer.innerHTML = '';
             showModal();
         });
     }

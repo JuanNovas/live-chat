@@ -19,5 +19,10 @@ async def get_conversation(receiver: str, credentials: HTTPAuthorizationCredenti
     
     
     conversation = db.messages.find({ "$or": [{"user" : user, "receiver" : receiver}, {"user" : receiver, "receiver" : user}]})
+    clean_conversation = []
 
-    return dumps(conversation)
+    for doc in conversation:
+        doc['_id'] = str(doc['_id'])
+        clean_conversation.append(doc)
+
+    return {"conversation" : list(clean_conversation)}
