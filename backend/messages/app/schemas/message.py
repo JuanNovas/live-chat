@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
 class MessageSchema(BaseModel):
-    receiver : int
+    receiver : str
     body : str
 
