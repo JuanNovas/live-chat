@@ -190,8 +190,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 })
                 .then(response => response.json())
                 .then(contacts => {
-                    // La respuesta parece estar doblemente escapada
-                    console.log('Contacts:', contacts.contacts);
+                    // La respuesta parece estar doblemente escapa
                     // Aquí puedes hacer algo con la lista de contactos obtenida
                     const contactsContainer = document.querySelector('.contacts-container');
                     contactsContainer.innerHTML = ''; // Limpiar los contactos actuales
@@ -211,4 +210,43 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     console.error('Error fetching contacts:', error);
                 });
             }
+
+
+
+
+
+
+        const addContactButton = document.getElementById('add-contact-button');
+        const addContactModal = document.getElementById('addContactModal');
+        const addContactForm = document.getElementById('addContactForm');
+        const cancelAddContactButton = document.getElementById('cancelAddContactButton');
+    
+        if (addContactButton) {
+            addContactButton.addEventListener('click', function() {
+                addContactModal.style.display = 'block';
+            });
+        }
+    
+        if (cancelAddContactButton) {
+            cancelAddContactButton.addEventListener('click', function() {
+                addContactModal.style.display = 'none';
+            });
+        }
+    
+        if (addContactForm) {
+            addContactForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const newContactUsername = document.getElementById('newContactUsername').value;
+                fetch(`http://127.0.0.1:8004/add_contact`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ contact: newContactUsername})
+                })
+                .then(data => load_contacts(username, token));
+                addContactModal.style.display = 'none';
+            });
+        }
 });
