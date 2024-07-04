@@ -20,7 +20,6 @@ async def get_contacts(credentials: HTTPAuthorizationCredentials = Depends(HTTPB
     
     
     contacts = list(Contact.get_all(user))
-    print(contacts)
     clean_contacts = []
     
     for contact in contacts:
