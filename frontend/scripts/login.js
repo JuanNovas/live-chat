@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     var token = localStorage.getItem('jwtToken');
     var selected = null;
     var username;
+    var websocket = null;
 
     if (token) {
         fetch('http://127.0.0.1:8003/validate_token', {
@@ -79,6 +80,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('loginModal').style.display = 'block';
     }
 
+
+
+
+
+    const chatContainer = document.getElementById('chat-container');
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+
+
+
+
+
+
     function LoadChat(contact) {
         fetch(`http://127.0.0.1:8002/get_conversation?receiver=${contact}`, {
             method: 'GET',
@@ -116,68 +130,81 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 chatContainer.appendChild(messageElement);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             });
+    
+            if (websocket) {
+                websocket.close();
+                websocket = null;
+            }
+
+            // Conexión al WebSocket
+            const ws = new WebSocket(`ws://127.0.0.1:8005/ws/${contact}?token=${token}`);
+            websocket = ws;
+            
+            ws.onopen = () => {
+                console.log('Conectado al WebSocket');
+            };
+    
+            ws.onmessage = (event) => {
+                const messageData = JSON.parse(event.data);
+    
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+    
+                const author = document.createElement('span');
+                author.classList.add('message-author');
+                author.textContent = messageData.user;
+    
+                const timestamp = document.createElement('span');
+                timestamp.classList.add('message-timestamp');
+                timestamp.textContent = new Date(messageData.timestamp).toLocaleString();
+    
+                const messageContent = document.createElement('div');
+                messageContent.classList.add('message-content');
+                messageContent.textContent = messageData.body;
+    
+                messageElement.appendChild(author);
+                messageElement.appendChild(messageContent);
+                messageElement.appendChild(timestamp);
+    
+                chatContainer.appendChild(messageElement);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            };
+    
+            ws.onclose = () => {
+                console.log('Desconectado del WebSocket');
+            };
+    
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+            
+            // Enviar mensajes a través del WebSocket
+            sendButton.addEventListener('click', () => {
+                const messageText = messageInput.value.trim();
+                if (messageText !== '') {
+                    const messageData = {
+                        user: username,
+                        body: messageText,
+                        timestamp: new Date().toISOString()
+                    };
+                    websocket.send(JSON.stringify(messageData));
+                    messageInput.value = '';
+
+                }
+            });
+    
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendButton.click();
+                }
+            });
+    
         })
         .catch(error => {
             console.error('Error loading conversation:', error);
         });
     }
-    
 
-    const chatContainer = document.getElementById('chat-container');
-    const messageInput = document.getElementById('message-input');
-    const sendButton = document.getElementById('send-button');
-    
-    sendButton.addEventListener('click', () => {
-        const messageText = messageInput.value.trim();
-        if (messageText !== '' && selected !== null) {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message');
-    
-            // Obtener el usuario actual (puedes ajustar esto según tu lógica)
-            const user = username; // Reemplaza esto con la lógica para obtener el nombre del usuario actual
-            const timestamp = new Date().toLocaleString();
-    
-            // Crear los elementos para el mensaje
-            const userElement = document.createElement('div');
-            userElement.classList.add('message-user');
-            userElement.textContent = user;
-    
-            const bodyElement = document.createElement('div');
-            bodyElement.classList.add('message-body');
-            bodyElement.textContent = messageText;
-    
-            const timestampElement = document.createElement('div');
-            timestampElement.classList.add('message-timestamp');
-            timestampElement.textContent = timestamp;
-    
-            // Agregar los elementos al mensaje
-            messageElement.appendChild(userElement);
-            messageElement.appendChild(bodyElement);
-            messageElement.appendChild(timestampElement);
-    
-            // Agregar el mensaje al contenedor del chat
-            chatContainer.appendChild(messageElement);
-            messageInput.value = '';
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-    
-            // Enviar el mensaje al servidor
-            fetch(`http://127.0.0.1:8002/send`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ body: messageText, receiver: selected })
-            });
-        }
-    });
-    
-    
-    messageInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            sendButton.click();
-        }
-    });
 
     function load_contacts(data, token) { 
         console.log('User:', data.user);
