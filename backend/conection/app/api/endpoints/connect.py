@@ -21,7 +21,6 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str, token: str):
     
     conversation = db.contacts.find_one({"users": {"$all": [user_id, user]}})
     if not conversation:
-        print("Invalid user or conversation not found")
         await websocket.close(code=1008)
         return
     
