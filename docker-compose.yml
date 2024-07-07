@@ -1,0 +1,74 @@
+version: '3.8'
+
+networks:
+  livechat:
+    driver: bridge
+
+services:
+  login-service:
+    build:
+      context: ./login
+    ports:
+      - "8001:8000"
+    environment:
+      - "MONGODB_URI=mongodb://mongo:27017/livechat?retryWrites=true&w=majority&appName=Cluster0"
+      - "KEY=GHQEVXwuFdaLKXNPeAXagyUuz2nyQv0317NasaiIvCCD8luPk7gUB32Lzbw5rk3Hg2yH6esZmi0dlaBEp4W5E8iZ0HYvdu8vJdAyF3imaFI8dhauEGObBhK8b7u56ts5cbd1KdPeAb8mPES7eEaJzksQtRK5m14d47bhcnDrR3a84zUhc6kekx9Hn0e2btDnRShxsGEW"
+      - "ALGORITHM=HS256"
+    networks:
+      - livechat
+
+  message-service:
+    build:
+      context: ./messages
+    ports:
+      - "8002:8000"
+    environment:
+      - "MONGODB_URI=mongodb://mongo:27017/livechat?retryWrites=true&w=majority&appName=Cluster0"
+      - "KEY=GHQEVXwuFdaLKXNPeAXagyUuz2nyQv0317NasaiIvCCD8luPk7gUB32Lzbw5rk3Hg2yH6esZmi0dlaBEp4W5E8iZ0HYvdu8vJdAyF3imaFI8dhauEGObBhK8b7u56ts5cbd1KdPeAb8mPES7eEaJzksQtRK5m14d47bhcnDrR3a84zUhc6kekx9Hn0e2btDnRShxsGEW"
+      - "ALGORITHM=HS256"
+    networks:
+      - livechat
+
+  verification-service:
+    build:
+      context: ./verification
+    ports:
+      - "8003:8000"
+    environment:
+      - "KEY=GHQEVXwuFdaLKXNPeAXagyUuz2nyQv0317NasaiIvCCD8luPk7gUB32Lzbw5rk3Hg2yH6esZmi0dlaBEp4W5E8iZ0HYvdu8vJdAyF3imaFI8dhauEGObBhK8b7u56ts5cbd1KdPeAb8mPES7eEaJzksQtRK5m14d47bhcnDrR3a84zUhc6kekx9Hn0e2btDnRShxsGEW"
+      - "ALGORITHM=HS256"
+    networks:
+      - livechat
+
+  contacts-service:
+    build:
+      context: ./contacts
+    ports:
+      - "8004:8000"
+    environment:
+      - "MONGODB_URI=mongodb://mongo:27017/livechat?retryWrites=true&w=majority&appName=Cluster0"
+    networks:
+      - livechat
+
+  conection-service:
+    build:
+      context: ./conection
+    ports:
+      - "8005:8000"
+    environment:
+      - "MONGODB_URI=mongodb://mongo:27017/livechat?retryWrites=true&w=majority&appName=Cluster0"
+    networks:
+      - livechat
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - livechat
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
