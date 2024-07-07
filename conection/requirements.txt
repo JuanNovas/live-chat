@@ -1,7 +1,7 @@
 annotated-types==0.7.0
 anyio==4.4.0
 bcrypt==4.0.1
-certifi==2024.6.2
+certifi>=2024.07.04
 charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
@@ -28,7 +28,6 @@ pydantic_core==2.18.4
 Pygments==2.18.0
 pymongo==4.8.0
 python-dotenv==1.0.1
-python-jose==3.3.0
 python-multipart==0.0.9
 PyYAML==6.0.1
 requests==2.32.3
