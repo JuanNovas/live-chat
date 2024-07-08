@@ -35,33 +35,6 @@ The application is composed of several microservices, each responsible for a spe
 - **🔗 Connection Service**: Manages WebSocket communications to enable real time chat conversations.
 - **🗄️ MongoDB Database**: Stores all persistent data for the application.
 
-## 🔧 Services
-
-### 🔑 Login Service
-
-- Endpoint: `/login`
-- Description: Creates users and provides JWT tokens for session management.
-
-### ✅ Verification Service
-
-- Endpoint: `/verify`
-- Description: Handles token verification.
-
-### 📇 Contacts Service
-
-- Endpoint: `/contacts`
-- Description: Manages user contacts.
-
-### 💬 Messages Service
-
-- Endpoint: `/messages`
-- Description: Manages uploads and download of messages.
-
-### 🔗 Connection Service
-
-- Endpoint: `/connect`
-- Description: Manages WebSocket connections for real-time communication.
-
 ## 🛠️ Technologies
 
 - **FastAPI**: Back-end framework for building APIs.
